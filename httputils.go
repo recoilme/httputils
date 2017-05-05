@@ -54,7 +54,7 @@ func HttpGet(url string, headers map[string]string) []byte {
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	} else {
 		return body
 	}
