@@ -34,7 +34,8 @@ func HttpGet(url string, headers map[string]string) []byte {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return nil
 	}
 	for k, v := range defHeaders {
 		req.Header.Set(k, v)
@@ -44,10 +45,13 @@ func HttpGet(url string, headers map[string]string) []byte {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return nil
 	}
-
 	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return nil
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln(err)
@@ -64,7 +68,8 @@ func HttpPut(url string, headers map[string]string, b []byte) (result bool) {
 	client := &http.Client{}
 	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(b))
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	for k, v := range defHeaders {
 		req.Header.Set(k, v)
@@ -74,7 +79,7 @@ func HttpPut(url string, headers map[string]string, b []byte) (result bool) {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	} else {
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
