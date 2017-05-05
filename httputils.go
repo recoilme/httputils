@@ -36,7 +36,6 @@ func HttpGet(url string, headers map[string]string) []byte {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	//req.Host = "yandex.ru"
 	for k, v := range defHeaders {
 		req.Header.Set(k, v)
 	}
@@ -67,7 +66,6 @@ func HttpPut(url string, headers map[string]string, b []byte) (result bool) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	//req.Host = "yandex.ru"
 	for k, v := range defHeaders {
 		req.Header.Set(k, v)
 	}
@@ -78,8 +76,10 @@ func HttpPut(url string, headers map[string]string, b []byte) (result bool) {
 	if err != nil {
 		log.Fatalln(err)
 	} else {
-		result = true
+		defer resp.Body.Close()
+		if resp.StatusCode == 200 {
+			result = true
+		}
 	}
-	defer resp.Body.Close()
 	return
 }
